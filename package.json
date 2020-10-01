@@ -1,0 +1,30 @@
+{
+  "name": "around-express",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Av1sa/around-express.git"
+  },
+  "author": "Marina Manelis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Av1sa/around-express/issues"
+  },
+  "homepage": "https://github.com/Av1sa/around-express#readme",
+  "devDependencies": {
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-react": "^7.21.2",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
