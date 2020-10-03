@@ -14,9 +14,9 @@ router.get("/", (req, res) => {
 
 router.get("/:id", (req, res) => {
   const { id } = req.params;
-  fs.readFile(path.join(__dirname, "../data/users.json"), (err, data) => {
+  fs.readFile(path.join(__dirname, "../data/", "users.json"), (err, data) => {
     if (err) {
-      res.status(400).send({ message: "Users file not found" });
+      res.status(500).send({ message: "Users file not found" });
       return;
     }
     let currentUser = null;
@@ -26,7 +26,7 @@ router.get("/:id", (req, res) => {
       }
     });
     if (!currentUser) {
-      res.send({ message: "User ID not found" });
+      res.status(404).send({ message: "User ID not found" });
       return;
     }
     res.send(currentUser);
