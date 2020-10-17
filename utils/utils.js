@@ -20,6 +20,6 @@ const setErrorDetails = (e) => {
 };
 
 //URL validation
-const regex = /^http(s)?:\/\/(www\.)?[\w\-\._~:\/\?#\[\]@!\$&\(\)\*\+,;=]+\.\w{2,6}[\w\-\._~:\/\?#\[\]@!\$&'\(\)\*\+,;=]+$/gim;
+const regex = /^http(s)?:\/\/(www\.)?[\w\-\._~:\/\?#\[\]@!\$&\(\)\*\+,;=]+\.\w{1,6}[\w\-\._~:\/\?#\[\]@!\$&'\(\)\*\+,;=]+$/gim;
 
 module.exports = { setErrorDetails, regex };

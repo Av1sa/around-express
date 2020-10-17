@@ -10,7 +10,7 @@ const getCards = (req, res) => {
     });
 }
 
-const constdeleteCard = (req, res) => {
+const deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => res.send({ data: card }))
     .catch((err) => {
