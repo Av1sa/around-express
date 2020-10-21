@@ -1,16 +1,20 @@
 const setErrorDetails = (e) => {
-  let status = 500;
-  let message = "Server error";
+  let status;
+  let message;
   switch (e.name) {
-    case "ValidationError": {
+    case 'ValidationError': {
       status = 400;
-      message = "Bad input";
+      message = 'Bad input';
       break;
     }
-    case "CastError": {
+    case 'CastError': {
       status = 404;
-      message = "Not found";
+      message = 'Not found';
       break;
+    }
+    default: {
+      status = 400;
+      message = 'Server error';
     }
   }
   return {
@@ -19,7 +23,7 @@ const setErrorDetails = (e) => {
   };
 };
 
-//URL validation
-const regex = /^http(s)?:\/\/(www\.)?[\w\-\._~:\/\?#\[\]@!\$&\(\)\*\+,;=]+\.\w{1,6}[\w\-\._~:\/\?#\[\]@!\$&'\(\)\*\+,;=]+$/gim;
+// URL validation
+const regex = /https?:\/\/(www\.)?[a-zA-Z0-9-@:%_+.~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([a-zA-Z0-9-@:%_+.~#=?&/]*)/;
 
 module.exports = { setErrorDetails, regex };

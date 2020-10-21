@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const { regex } = require("../utils/utils");
+const mongoose = require('mongoose');
+const { regex } = require('../utils/utils');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -23,4 +23,4 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("user", userSchema);
+module.exports = mongoose.model('user', userSchema);
