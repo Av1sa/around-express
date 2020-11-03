@@ -3,12 +3,14 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
+const cors = require("cors");
 const usersRouter = require("./routes/users.js");
 const cardsRouter = require("./routes/cards.js");
-const { login, createUser } = require("./controllers/users");
+const { loginUser, createUser } = require("./controllers/users");
 const { Joi, celebrate, errors } = require("celebrate");
 const { NotFoundError } = require("./errors/errors");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
+const auth = require("./middlewares/auth");
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -23,9 +25,11 @@ mongoose.connect("mongodb://localhost:27017/aroundb", {
 });
 
 const app = express();
-const { PORT = 3000 } = process.env;
 
+const { PORT = 3000 } = process.env;
 app.listen(PORT);
+
+app.use(cors());
 app.use(helmet());
 app.use(limiter);
 app.use(bodyParser.json());
@@ -33,14 +37,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
-
-
 //Remove after passing the review
 app.get("/crash-test", () => {
   setTimeout(() => {
     throw new Error("Server will crash now");
   }, 0);
 });
+/////
 
 app.post(
   "/signin",
@@ -49,9 +52,10 @@ app.post(
       email: Joi.string().required().email(),
       password: Joi.string().required(),
     }),
-  }).unknown(true),
-  login
+  }),
+  loginUser
 );
+
 app.post(
   "/signup",
   celebrate({
@@ -59,10 +63,10 @@ app.post(
       email: Joi.string().required().email(),
       password: Joi.string().required(),
       name: Joi.string().min(2).max(30),
-      about: Joi.string().min(2).max(30),
+      about: Joi.string().min(2).max(200),
       avatar: Joi.string().uri(),
     }),
-  }).unknown(true),
+  }),
   createUser
 );
 
@@ -72,11 +76,6 @@ app.use("/cards", cardsRouter);
 app.use("/users", usersRouter);
 
 app.use(errorLogger);
-
-// app.get("*", (req, res) => {
-//   throw new NotFoundError("Requested resource not found");
-// });
-
 app.use(errors());
 
 app.use((err, req, res, next) => {

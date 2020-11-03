@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-// const { regex } = require("../utils/utils");
+const { regex } = require("../utils/utils");
 const validator = require("validator");
 
 const userSchema = new mongoose.Schema({
@@ -25,13 +25,13 @@ const userSchema = new mongoose.Schema({
   about: {
     type: String,
     minlength: 2,
-    maxlength: 30,
+    maxlength: 200,
     default: "Explorer",
   },
   avatar: {
     type: String,
     validate: {
-      validator: (link) => validator.isURL(link),
+      validator: (link) => regex.test(link),
     },
     default: "https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg",
   },

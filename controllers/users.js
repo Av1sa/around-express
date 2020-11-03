@@ -14,7 +14,7 @@ const getUser = (req, res) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError("Not found");
+        throw new NotFoundError("User not found");
       }
       res.send({ data: user });
     })
@@ -25,7 +25,7 @@ const getCurrentUser = (req, res) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError("No user with matching ID found");
+        throw new NotFoundError("User not found");
       }
       res.send({ data: user });
     })
@@ -37,7 +37,10 @@ const createUser = (req, res) => {
   bcrypt
     .hash(password, 10)
     .then((hash) => User.create({ email, password: hash, name, avatar, about }))
-    .then((password) => res.send(password)) // ? response format
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, secretKey, { expiresIn: "7d" });
+      res.send({ data: user, token });
+    })
     .catch(next);
 };
 
@@ -63,7 +66,8 @@ const updateAvatar = (req, res) => {
     .catch(next);
 };
 
-const login = (req, res) => {
+//TO DO fix user._id
+const loginUser = (req, res) => {
   const { email, password } = req.body;
   User.findOne({ email })
     .select("+password")
@@ -96,5 +100,5 @@ module.exports = {
   createUser,
   updateProfile,
   updateAvatar,
-  login,
+  loginUser,
 };
