@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const { setErrorDetails, secretKey } = require("../utils/utils");
+const { secretKey } = require("../utils/utils");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { NotFoundError, UnauthorizedError } = require("../errors/errors");
@@ -38,6 +38,9 @@ const createUser = (req, res) => {
     .hash(password, 10)
     .then((hash) => User.create({ email, password: hash, name, avatar, about }))
     .then((user) => {
+      if (!user) {
+        throw new NotFoundError("User not found");
+      }
       const token = jwt.sign({ _id: user._id }, secretKey, { expiresIn: "7d" });
       res.send({ data: user, token });
     })
@@ -66,7 +69,6 @@ const updateAvatar = (req, res) => {
     .catch(next);
 };
 
-//TO DO fix user._id
 const loginUser = (req, res) => {
   const { email, password } = req.body;
   User.findOne({ email })

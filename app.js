@@ -8,7 +8,6 @@ const usersRouter = require("./routes/users.js");
 const cardsRouter = require("./routes/cards.js");
 const { loginUser, createUser } = require("./controllers/users");
 const { Joi, celebrate, errors } = require("celebrate");
-const { NotFoundError } = require("./errors/errors");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const auth = require("./middlewares/auth");
 
@@ -37,13 +36,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
-//Remove after passing the review
-app.get("/crash-test", () => {
-  setTimeout(() => {
-    throw new Error("Server will crash now");
-  }, 0);
-});
-/////
+// //Remove after passing the review
+// app.get("/crash-test", () => {
+//   setTimeout(() => {
+//     throw new Error("Server will crash now");
+//   }, 0);
+// });
+// /////
 
 app.post(
   "/signin",

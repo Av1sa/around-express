@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { regex } = require("../utils/utils");
 const validator = require("validator");
+const { defaultUser } = require("../utils/utils");
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -20,20 +21,20 @@ const userSchema = new mongoose.Schema({
     type: String,
     minlength: 2,
     maxlength: 30,
-    default: "Jacques Cousteau",
+    default: defaultUser.name,
   },
   about: {
     type: String,
     minlength: 2,
     maxlength: 200,
-    default: "Explorer",
+    default: defaultUser.about,
   },
   avatar: {
     type: String,
     validate: {
       validator: (link) => regex.test(link),
     },
-    default: "https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg",
+    default: defaultUser.avatar,
   },
 });
 
