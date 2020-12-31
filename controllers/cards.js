@@ -3,7 +3,12 @@ const { BadInputError, NotFoundError } = require("../errors/errors");
 
 const getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.send({ data: cards }))
+    .then((cards) => {
+      if (!cards) {
+        throw new NotFoundError("Card not found");
+      }
+      res.send({ data: cards });
+    })
     .catch(next);
 };
 

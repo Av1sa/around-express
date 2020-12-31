@@ -8,9 +8,9 @@ const {
   updateAvatar,
 } = require("../controllers/users");
 
-router.get("/", getUsers);
-router.get("/:userId", getUser);
 router.get("/me", getCurrentUser);
+router.get("/:userId", getUser);
+router.get("/", getUsers);
 router.patch(
   "/me",
   celebrate({

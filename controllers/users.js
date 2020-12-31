@@ -6,7 +6,12 @@ const { NotFoundError, UnauthorizedError } = require("../errors/errors");
 
 const getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.send({ data: users }))
+    .then((users) => {
+      if (!users) {
+        throw new NotFoundError("Users not found");
+      }
+      res.send({ data: users });
+    })
     .catch(next);
 };
 
@@ -44,7 +49,10 @@ const createUser = (req, res) => {
       const token = jwt.sign({ _id: user._id }, secretKey, { expiresIn: "7d" });
       res.send({ data: user, token });
     })
-    .catch(next);
+    .catch((err) => {
+      res.send({ message: "User with such an email already exists" });
+      return next();
+    });
 };
 
 const updateProfile = (req, res) => {
@@ -79,9 +87,9 @@ const loginUser = (req, res) => {
           new UnauthorizedError("Incorrect password or email")
         );
       }
-      return bcrypt.compare(password, user.password);
+      return [bcrypt.compare(password, user.password), user];
     })
-    .then((matched) => {
+    .then(([matched, user]) => {
       if (!matched) {
         return Promise.reject(
           new UnauthorizedError("Incorrect password or email")
@@ -90,7 +98,7 @@ const loginUser = (req, res) => {
       const token = jwt.sign({ _id: user._id }, secretKey, {
         expiresIn: "7d",
       });
-      res.send({ token });
+      res.status(200).send({ token });
     })
     .catch(next);
 };
